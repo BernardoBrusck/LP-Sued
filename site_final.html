@@ -1,0 +1,505 @@
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Romário Sued | Advocacia Estratégica</title>
+      <meta name="description" content="Advocacia moderna, técnica e resolutiva. Especialista em Direito Tributário e Imobiliário." />
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+      <!-- Tailwind CSS -->
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script>
+          tailwind.config = {
+              theme: {
+                  extend: {
+                      colors: {
+                          brand: {
+                              black: '#0a0a0a',
+                              gray: '#171717',
+                              light: '#FAFAFA',
+                              gold: '#B4975A',
+                              goldHover: '#C6A355',
+                          }
+                      },
+                      fontFamily: {
+                          sans: ['"Inter"', 'sans-serif'],
+                          serif: ['"Playfair Display"', 'serif'],
+                      }
+                  }
+              }
+          }
+      </script>
+      <style>
+          html { scroll-behavior: smooth; }
+          body { background-color: #FAFAFA; color: #0a0a0a; overflow-x: hidden; }
+          .img-grayscale { filter: grayscale(100%); transition: filter 1s ease, transform 1s ease; }
+          ::-webkit-scrollbar { width: 6px; }
+          ::-webkit-scrollbar-track { background: #0a0a0a; }
+          ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+          ::-webkit-scrollbar-thumb:hover { background: #B4975A; }
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+          .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+          @media (max-width: 1024px) {
+              .bg-fixed-mobile-fix { background-attachment: scroll !important; }
+          }
+      </style>
+
+      <!-- React, Framer Motion, Lucide e Babel Standalone via CDN -->
+      <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+      <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+      <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+      <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+      <script src="https://unpkg.com/lucide@latest"></script>
+      <script src="https://unpkg.com/lucide-react@latest"></script>
+  </head>
+  <body class="antialiased selection:bg-brand-gold selection:text-white">
+      <div id="root"></div>
+
+      <script type="text/babel">
+          const { useState, useEffect, useRef, useMemo, Fragment } = React;
+          const { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } = FramerMotion;
+          const { 
+              Home, User, Briefcase, FileText, MessageCircle, ArrowUp, 
+              TrendingUp, Scale, RefreshCw, Building, Shield, Key, Search, 
+              ArrowUpRight, CircleDollarSign, Calculator, Handshake, Users, 
+              HeartPulse, Activity, Zap, Award, Check, Plus, Minus, Mail, 
+              MapPin, Phone, CheckCircle, AlertCircle, Loader2, Circle, ArrowDown 
+          } = LucideReact;
+
+          const cn = (...classes) => classes.filter(Boolean).join(' ');
+
+          function useOnScreen(ref, rootMargin = "0px") {
+              const [isIntersecting, setIntersecting] = useState(false);
+              useEffect(() => {
+                  const observer = new IntersectionObserver(
+                      ([entry]) => {
+                          if (entry.isIntersecting) {
+                              setIntersecting(true);
+                              observer.disconnect();
+                          }
+                      },
+                      { rootMargin }
+                  );
+                  if (ref.current) observer.observe(ref.current);
+                  return () => observer.disconnect();
+              }, [ref, rootMargin]);
+              return isIntersecting;
+          }
+
+          const Reveal = ({ children, width = "fit-content", delay = 0 }) => {
+              const ref = useRef(null);
+              const isVisible = useOnScreen(ref, "-30px");
+              const shouldReducedMotion = useReducedMotion();
+              const transformValue = shouldReducedMotion ? "translateY(0)" : "translateY(20px)";
+
+              return (
+                  <div ref={ref} style={{ width, position: 'relative' }}>
+                      <div
+                          style={{
+                              transform: isVisible ? "translateY(0)" : transformValue,
+                              opacity: isVisible ? 1 : 0,
+                              transition: `all 0.8s cubic-bezier(0.2, 0.65, 0.3, 0.9) ${delay}s`
+                          }}
+                      >
+                          {children}
+                      </div>
+                  </div>
+              );
+          };
+
+          const SectionTitle = ({ subtitle, title, dark = false }) => (
+              <div className="mb-16 md:mb-20 text-left">
+                  <Reveal width="100%">
+                      <div className="flex items-center gap-4 mb-6">
+                          <div className="h-[1px] w-12 bg-brand-gold"></div>
+                          <span className={cn("font-sans font-bold tracking-[0.2em] text-xs uppercase", dark ? 'text-gray-400' : 'text-gray-500')}>
+                              {subtitle}
+                          </span>
+                      </div>
+                  </Reveal>
+                  <Reveal width="100%" delay={0.1}>
+                      <h2 className={cn("font-serif text-4xl md:text-5xl lg:text-6xl font-medium leading-tight", dark ? 'text-white' : 'text-brand-black')}>
+                          {title}<span className="text-brand-gold">.</span>
+                      </h2>
+                  </Reveal>
+              </div>
+          );
+
+          const Button = ({ children, primary = true, onClick, className = "", type = "button", disabled = false }) => (
+              <motion.button
+                  type={type}
+                  onClick={onClick}
+                  disabled={disabled}
+                  whileTap={disabled ? undefined : { scale: 0.96 }}
+                  whileHover={disabled ? undefined : { scale: 1.02 }}
+                  className={cn(
+                      "px-8 py-4 text-sm tracking-widest font-bold uppercase transition-all duration-300 rounded shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                      disabled ? 'opacity-50 cursor-not-allowed' : '',
+                      primary 
+                          ? "bg-brand-gold text-white border border-brand-gold hover:bg-brand-goldHover hover:shadow-lg" 
+                          : "bg-transparent border border-white/30 text-white backdrop-blur-sm hover:bg-white hover:text-brand-black",
+                      className
+                  )}
+              >
+                  {children}
+              </motion.button>
+          );
+
+          const ElegantShape = ({ className, delay = 0, width = 400, height = 100, rotate = 0, gradient = "from-white/[0.08]" }) => (
+              <motion.div
+                  initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+                  animate={{ opacity: 1, y: 0, rotate }}
+                  whileHover={{ scale: 1.05, rotate: rotate + 2, filter: "brightness(1.2)" }}
+                  transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96] }}
+                  className={cn("absolute cursor-pointer", className)}
+              >
+                  <motion.div
+                      animate={{ y: [0, 15, 0] }}
+                      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                      style={{ width, height }}
+                      className="relative"
+                  >
+                      <div className={cn("absolute inset-0 rounded-full bg-gradient-to-r to-transparent backdrop-blur-[2px] border-2 border-white/[0.15] shadow-lg", gradient)} />
+                  </motion.div>
+              </motion.div>
+          );
+
+          const Hero = () => (
+              <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-gold/[0.05] via-transparent to-gray-500/[0.05] blur-3xl" />
+                  <div className="absolute inset-0 overflow-hidden pointer-events-auto">
+                      <ElegantShape delay={0.3} width={600} height={140} rotate={12} gradient="from-brand-gold/[0.15]" className="left-[-10%] top-[15%]" />
+                      <ElegantShape delay={0.5} width={500} height={120} rotate={-15} gradient="from-gray-500/[0.15]" className="right-[-5%] top-[70%]" />
+                      <ElegantShape delay={0.4} width={300} height={80} rotate={-8} gradient="from-brand-gold/[0.15]" className="left-[5%] bottom-[5%]" />
+                  </div>
+                  <div className="relative z-10 container mx-auto px-4 md:px-6 pointer-events-none">
+                      <div className="max-w-4xl mx-auto text-center pointer-events-auto">
+                          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] mb-12">
+                              <Circle className="h-2 w-2 fill-brand-gold" size={8} />
+                              <span className="text-sm text-white/70 tracking-widest uppercase font-semibold">Especialista em Direito Estratégico</span>
+                          </motion.div>
+                          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-serif text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-medium mb-10 tracking-tight leading-[0.9]">
+                              <span className="text-white block">Defesa de</span>
+                              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-gold via-white/90 to-gray-400 italic">Alto Impacto.</span>
+                          </motion.h1>
+                          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-white/50 mb-10 text-xl font-light max-w-xl mx-auto">
+                              Advocacia estratégica para quem não aceita o básico. Proteção patrimonial e eficiência tributária com profundidade técnica.
+                          </motion.p>
+                          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                              <Button onClick={() => document.getElementById('contato').scrollIntoView({ behavior: 'smooth' })}>Agendar Consulta</Button>
+                              <Button primary={false} onClick={() => document.getElementById('sobre').scrollIntoView({ behavior: 'smooth' })}>Conhecer Escritório</Button>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/80 pointer-events-none" />
+              </section>
+          );
+
+          const About = () => (
+              <section id="sobre" className="py-24 md:py-32 bg-white relative overflow-hidden group/about">
+                  <div className="absolute top-0 right-0 w-1/3 h-full bg-gray-50 -z-10 hidden lg:block border-l border-gray-100"></div>
+                  <div className="max-w-7xl mx-auto px-6">
+                      <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+                          <div className="w-full lg:w-5/12 relative">
+                              <Reveal width="100%">
+                                  <div className="relative aspect-[3/4] overflow-hidden rounded-sm shadow-2xl">
+                                      <img 
+                                          src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=800&q=80" 
+                                          alt="Romário Sued" 
+                                          className="w-full h-full object-cover img-grayscale group-hover/about:filter-none group-hover/about:scale-105" 
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
+                                      <div className="absolute bottom-6 left-6 text-white z-10">
+                                          <p className="text-xs uppercase tracking-widest mb-1 opacity-80">Sócio Fundador</p>
+                                          <p className="font-serif text-2xl">Romário Sued</p>
+                                      </div>
+                                  </div>
+                              </Reveal>
+                          </div>
+                          <div className="w-full lg:w-7/12 pt-4">
+                              <Reveal delay={0.1}>
+                                  <div className="flex items-center gap-3 mb-6">
+                                      <div className="h-px w-8 bg-brand-gold"></div>
+                                      <span className="text-brand-gold font-bold tracking-widest text-xs uppercase">Sobre o Escritório</span>
+                                  </div>
+                              </Reveal>
+                              <Reveal delay={0.2}>
+                                  <h2 className="font-serif text-4xl lg:text-5xl text-brand-black mb-8 leading-tight">Advocacia artesanal com <br/><span className="text-brand-gold italic">precisão cirúrgica</span>.</h2>
+                              </Reveal>
+                              <div className="space-y-8 max-w-xl text-gray-600 leading-relaxed">
+                                  <Reveal delay={0.3}>
+                                      <p className="text-lg text-brand-black font-medium border-l-2 border-brand-gold pl-6 py-1">
+                                          "O mercado não aceita mais respostas padronizadas. Nossa atuação combina profundidade acadêmica com uma visão agressiva de negócios."
+                                      </p>
+                                  </Reveal>
+                                  <Reveal delay={0.4}>
+                                      <p>Com mais de uma década de atuação, o Dr. Romário Sued foca na segurança jurídica e no resultado financeiro real para seus clientes.</p>
+                                  </Reveal>
+                              </div>
+                              <dl className="mt-16 grid grid-cols-3 gap-8 border-t pt-8">
+                                  <div><dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Atuação</dt><dd className="font-serif text-4xl text-brand-black">10<span className="text-brand-gold text-2xl">+</span></dd></div>
+                                  <div><dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Casos</dt><dd className="font-serif text-4xl text-brand-black">500<span className="text-brand-gold text-2xl">+</span></dd></div>
+                                  <div><dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Recuperados</dt><dd className="font-serif text-4xl text-brand-black">50<span className="text-brand-gold text-2xl">mi</span></dd></div>
+                              </dl>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+          );
+
+          const ServiceCard = ({ icon: Icon, title, desc, index, theme = 'light' }) => {
+              const isDark = theme === 'dark';
+              return (
+                  <Reveal delay={index * 0.1} width="100%">
+                      <div className={cn(
+                          "group relative w-full h-[320px] overflow-hidden rounded-xl border transition-all duration-500 cursor-pointer flex flex-col justify-between p-8",
+                          isDark ? 'bg-[#121212]/80 backdrop-blur-md border-white/10 hover:border-brand-gold/40' : 'bg-white border-gray-100 hover:shadow-xl'
+                      )}>
+                          <div className="flex justify-between items-start">
+                              <div className="p-3 bg-brand-light/5 rounded-lg text-brand-gold"><Icon size={32} /></div>
+                              <div className="p-2 rounded-full border border-white/10 opacity-30 group-hover:opacity-100 group-hover:text-brand-gold transition-all"><ArrowUpRight size={16} /></div>
+                          </div>
+                          <div className="mt-auto">
+                              <h3 className={cn("font-serif text-2xl mb-3", isDark ? "text-white" : "text-brand-black")}>{title}</h3>
+                              <p className={cn("text-sm leading-relaxed", isDark ? "text-gray-300" : "text-gray-500")}>{desc}</p>
+                              <div className="h-0.5 bg-brand-gold mt-4 w-0 group-hover:w-full transition-all duration-500" />
+                          </div>
+                      </div>
+                  </Reveal>
+              );
+          };
+
+          const TaxServices = () => (
+              <section className="py-24 bg-gray-50 border-b">
+                  <div className="max-w-7xl mx-auto px-6">
+                      <SectionTitle subtitle="Especialidade" title="Direito Tributário" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                          <ServiceCard icon={TrendingUp} title="Planejamento Fiscal" desc="Estratégias lícitas para redução de carga tributária." index={0} />
+                          <ServiceCard icon={RefreshCw} title="Recuperação de Créditos" desc="Resgate de valores pagos indevidamente nos últimos 5 anos." index={1} />
+                          <ServiceCard icon={Scale} title="Defesa Administrativa" desc="Atuação técnica contra autos de infração abusivos." index={2} />
+                          <ServiceCard icon={FileText} title="Consultoria Tributária" desc="Pareceres para operações complexas e reestruturações." index={3} />
+                      </div>
+                  </div>
+              </section>
+          );
+
+          const RealEstateServices = () => (
+              <section className="py-24 relative text-white overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center bg-fixed-mobile-fix"></div>
+                  <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
+                  <div className="max-w-7xl mx-auto px-6 relative z-10">
+                      <SectionTitle subtitle="Especialidade" title="Direito Imobiliário" dark />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                          <ServiceCard icon={Building} title="Regularização Fundiária" desc="Soluções para imóveis irregulares e usucapião." index={0} theme="dark" />
+                          <ServiceCard icon={Shield} title="Contratos Complexos" desc="BTS, permutas e operações estruturadas." index={1} theme="dark" />
+                          <ServiceCard icon={Key} title="Incorporação Imobiliária" desc="Assessoria completa para construtoras e incorporadoras." index={2} theme="dark" />
+                          <ServiceCard icon={Search} title="Due Diligence" desc="Auditoria profunda pré-aquisição para mitigar riscos." index={3} theme="dark" />
+                      </div>
+                  </div>
+              </section>
+          );
+
+          const Methodology = () => {
+              const steps = [
+                  { title: "Diagnóstico", desc: "Análise profunda para identificar riscos e oportunidades ocultas." },
+                  { title: "Estratégia", desc: "Definição do caminho jurídico mais seguro e eficiente." },
+                  { title: "Execução", desc: "Atuação técnica agressiva em todas as instâncias." },
+                  { title: "Resultado", desc: "Foco na resolução definitiva do conflito e proteção do cliente." }
+              ];
+              const ref = useRef(null);
+              const { scrollYProgress } = useScroll({ target: ref, offset: ["start center", "end center"] });
+              const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+              return (
+                  <section id="metodologia" className="py-24 md:py-32 bg-brand-light relative">
+                      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24">
+                          <div className="lg:sticky lg:top-32 h-fit">
+                              <SectionTitle subtitle="O Processo" title="Nossa Metodologia" />
+                              <p className="text-gray-600 text-lg mb-10 leading-relaxed">Não acreditamos em sorte. Cada caso é tratado como um projeto único com etapas bem definidas e execução técnica impecável.</p>
+                              <div className="p-8 bg-white rounded-xl shadow-xl border border-gray-100 group">
+                                  <div className="flex items-center gap-4 mb-4 text-brand-gold">
+                                      <div className="p-3 bg-brand-gold/10 rounded-lg group-hover:bg-brand-gold group-hover:text-white transition-colors duration-500">
+                                          <FileText size={24} />
+                                      </div>
+                                      <h4 className="font-bold font-serif text-xl text-brand-black">Transparência Radical</h4>
+                                  </div>
+                                  <p className="text-sm text-gray-500 leading-relaxed">Relatórios mensais detalhados e acesso direto à equipe estratégica para acompanhamento total.</p>
+                              </div>
+                          </div>
+                          <div ref={ref} className="relative pt-4">
+                              <div className="absolute left-2 top-8 bottom-8 w-px bg-gray-200"></div>
+                              <motion.div style={{ height }} className="absolute left-2 top-8 w-px bg-brand-gold origin-top z-10" />
+                              <div className="space-y-20 relative z-20">
+                                  {steps.map((step, idx) => (
+                                      <div key={idx} className="pl-10 group relative">
+                                          <div className="absolute left-[-31px] top-1 w-2.5 h-2.5 rounded-full bg-white border-2 border-brand-gold group-hover:bg-brand-gold transition-colors" />
+                                          <h3 className="text-3xl font-serif mb-3 group-hover:text-brand-gold transition-colors">{step.title}</h3>
+                                          <p className="text-gray-500 text-lg leading-relaxed">{step.desc}</p>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      </div>
+                  </section>
+              );
+          };
+
+          const Testimonials = () => {
+              const testimonialsList = [
+                  { text: "O planejamento tributário realizado pelo Dr. Romário foi um divisor de águas para nossa empresa.", name: "Ricardo Oliveira", role: "CEO, TechLogistics" },
+                  { text: "Conseguimos a regularização do nosso imóvel comercial em tempo recorde. Muito transparente.", name: "Ana Beatriz Costa", role: "Investidora" },
+                  { text: "A segurança jurídica que o escritório proporciona é fundamental para nossas operações.", name: "Marcos Vinícius", role: "Diretor de Incorporação" },
+                  { text: "Um advogado que fala a língua do empresário. Direto ao ponto e focado em resultados.", name: "Cláudio Duarte", role: "Sócio de Indústria" }
+              ];
+
+              return (
+                  <section className="py-24 bg-gray-50 overflow-hidden border-y border-gray-100">
+                      <div className="max-w-7xl mx-auto px-6">
+                          <SectionTitle subtitle="Depoimentos" title="O que dizem nossos clientes" />
+                          <div className="flex gap-6 mt-10 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] overflow-hidden">
+                              <motion.div 
+                                  className="flex gap-6"
+                                  animate={{ x: [0, -1000] }}
+                                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                              >
+                                  {[...testimonialsList, ...testimonialsList].map((t, i) => (
+                                      <div key={i} className="min-w-[350px] p-8 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                          <p className="text-sm italic text-gray-600 mb-8 leading-relaxed">"{t.text}"</p>
+                                          <div className="flex items-center gap-4">
+                                              <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center text-gray-300"><User size={24} /></div>
+                                              <div><p className="font-bold text-brand-black">{t.name}</p><p className="text-xs text-brand-gold uppercase tracking-widest font-semibold">{t.role}</p></div>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </motion.div>
+                          </div>
+                      </div>
+                  </section>
+              );
+          };
+
+          const Navbar = () => {
+              const [isScrolled, setIsScrolled] = useState(false);
+              const { scrollY } = useScroll();
+              
+              useMotionValueEvent(scrollY, "change", (v) => setIsScrolled(v > 100));
+
+              const navItems = [
+                  { name: 'Sobre', url: '#sobre' },
+                  { name: 'Metodologia', url: '#metodologia' },
+                  { name: 'Contato', url: '#contato' }
+              ];
+
+              return (
+                  <header className={cn(
+                      "fixed top-0 left-0 right-0 z-50 transition-all duration-500", 
+                      isScrolled ? "bg-brand-black/90 backdrop-blur-md py-4 shadow-xl" : "py-8"
+                  )}>
+                      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+                          <a href="#" className="font-serif font-bold text-2xl text-white tracking-tight">R.SUED<span className="text-brand-gold">.</span></a>
+                          <nav className="hidden md:flex gap-10">
+                              {navItems.map(item => (
+                                  <a key={item.name} href={item.url} className="text-white/70 hover:text-brand-gold text-xs font-bold uppercase tracking-widest transition-colors">{item.name}</a>
+                              ))}
+                          </nav>
+                          <button className="hidden sm:block px-6 py-2.5 border border-white/20 text-white rounded text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-brand-black transition-all">Agendar Consulta</button>
+                      </div>
+                  </header>
+              );
+          };
+
+          const FAQSection = () => {
+              const [openIndex, setOpenIndex] = useState(0);
+              const faqs = [
+                  { q: "Vocês atendem em todo o Brasil?", a: "Sim. Nossa estrutura digitalizada permite atuação eficiente em todo o território nacional." },
+                  { q: "Como funciona a cobrança de honorários?", a: "Transparência total. Definimos honorários (êxito ou pro labore) após a análise detalhada de cada caso." },
+                  { q: "Quanto tempo demora um processo de usucapião?", a: "O extrajudicial varia de 4 a 12 meses. O judicial depende do tribunal, mas focamos em máxima celeridade." }
+              ];
+
+              return (
+                  <section className="py-24 bg-brand-light">
+                      <div className="max-w-3xl mx-auto px-6">
+                          <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
+                          <div className="space-y-4">
+                              {faqs.map((f, i) => (
+                                  <div key={i} className="bg-white border-l-4 border-transparent hover:border-brand-gold transition-all shadow-sm">
+                                      <button onClick={() => setOpenIndex(openIndex === i ? -1 : i)} className="w-full flex justify-between p-6 text-left font-bold text-lg text-brand-black">
+                                          {f.q} {openIndex === i ? <Minus size={20}/> : <Plus size={20}/>}
+                                      </button>
+                                      <AnimatePresence>
+                                          {openIndex === i && (
+                                              <motion.div initial={{height:0, opacity:0}} animate={{height:'auto', opacity:1}} exit={{height:0, opacity:0}} className="overflow-hidden">
+                                                  <div className="p-6 pt-0 text-gray-500 leading-relaxed">{f.a}</div>
+                                              </motion.div>
+                                          )}
+                                      </AnimatePresence>
+                                  </div>
+                              ))}
+                          </div>
+                      </div>
+                  </section>
+              );
+          };
+
+          const Contact = () => (
+              <footer id="contato" className="bg-brand-black text-white relative py-24 overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover opacity-20 bg-fixed-mobile-fix"></div>
+                  <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-20">
+                      <div>
+                          <SectionTitle subtitle="Contato" title="Vamos Conversar" dark />
+                          <p className="text-gray-400 text-lg mb-12 font-light">Seu patrimônio merece defesa especializada. Retorno garantido em até 24h.</p>
+                          <div className="space-y-8">
+                              <div className="flex items-center gap-4"><div className="p-3 bg-white/5 rounded text-brand-gold"><Phone size={24}/></div><div><p className="text-xs text-gray-500 uppercase">Telefone</p><p className="font-bold text-xl">+55 11 99999-9999</p></div></div>
+                              <div className="flex items-center gap-4"><div className="p-3 bg-white/5 rounded text-brand-gold"><Mail size={24}/></div><div><p className="text-xs text-gray-500 uppercase">Email</p><p className="font-bold text-xl">contato@romariosued.adv.br</p></div></div>
+                          </div>
+                      </div>
+                      <div className="bg-white/5 p-10 rounded-2xl border border-white/10 backdrop-blur-md shadow-2xl">
+                          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                              <div className="grid grid-cols-2 gap-6">
+                                  <input className="bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-brand-gold w-full" placeholder="Nome" />
+                                  <input className="bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-brand-gold w-full" placeholder="Telefone" />
+                              </div>
+                              <input className="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-brand-gold" placeholder="Email" />
+                              <textarea rows="4" className="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-brand-gold" placeholder="Como podemos ajudar?"></textarea>
+                              <Button className="w-full">Enviar Solicitação</Button>
+                          </form>
+                      </div>
+                  </div>
+                  <div className="border-t border-white/5 mt-24 py-10 bg-black/40 text-center text-xs text-gray-600">
+                      &copy; {new Date().getFullYear()} Romário Sued. Todos os direitos reservados.
+                  </div>
+              </footer>
+          );
+
+          const App = () => (
+              <div className="bg-brand-light">
+                  <Navbar />
+                  <main>
+                      <Hero />
+                      <About />
+                      <TaxServices />
+                      <RealEstateServices />
+                      <Methodology />
+                      <Testimonials />
+                      <FAQSection />
+                      <Contact />
+                  </main>
+                  <button 
+                      onClick={() => window.scrollTo({top:0, behavior:'smooth'})} 
+                      className="fixed bottom-8 right-8 p-3 bg-brand-gold text-white rounded-full shadow-2xl z-50 hover:bg-brand-goldHover transition-colors"
+                  >
+                      <ArrowUp size={20}/>
+                  </button>
+              </div>
+          );
+
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(<App />);
+      </script>
+  </body>
+  </html>
