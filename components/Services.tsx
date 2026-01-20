@@ -1,13 +1,42 @@
-
 import React from 'react';
 import { SectionTitle, Reveal } from './UI';
-import { 
-  TrendingUp, Scale, RefreshCw, FileText, Building, 
-  Shield, Key, Search, ArrowUpRight, Briefcase, 
-  CircleDollarSign, Calculator, Handshake, Users, 
-  HeartPulse, Activity 
+import {
+  TrendingUp, Scale, RefreshCw, FileText, Building,
+  Shield, Key, Search, ArrowUpRight, Briefcase,
+  CircleDollarSign, Calculator, Handshake, Users,
+  HeartPulse, Activity, ChevronRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const ScrollHint = () => (
+  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none lg:hidden flex items-center pr-1 h-full">
+    {/* Gradient Fade Overlay - Context Aware? No, generic dark fade looks ok on white cards too? 
+          Actually, on Light Mode sections (Tax, Business), a Black Fade might look dirty. 
+          On Dark Mode (RealEstate, Social), a Black Fade is good. 
+          Let's make it subtle. 
+      */}
+    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black/10 to-transparent sm:from-black/20"></div>
+
+    <div className="flex -space-x-4 relative z-10 drop-shadow-sm">
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: [0, 1, 0], x: [0, 15, 30] }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            delay: i * 0.2,
+            ease: "easeOut",
+            fill: "forwards"
+          }}
+        >
+          <ChevronRight className="text-brand-gold w-10 h-10" strokeWidth={3} />
+        </motion.div>
+      ))}
+    </div>
+  </div>
+);
 
 // --- Responsive Service Card Component ---
 interface ServiceCardProps {
@@ -25,13 +54,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, desc, index, the
 
   return (
     <Reveal delay={index * 0.1} width="100%">
-      <MotionDiv 
+      <MotionDiv
         className={`
-          group relative w-full h-[300px] sm:h-[340px]
-          overflow-hidden rounded-xl border transition-all duration-500 cursor-pointer flex flex-col justify-between
-          ${isDark 
-            ? 'bg-[#121212]/80 backdrop-blur-md border-white/10 hover:border-brand-gold/40' 
-            : 'bg-white border-gray-100 hover:border-brand-gold/40 hover:shadow-xl hover:shadow-gray-200/50'
+          group relative w-full h-[320px] sm:h-[360px]
+          overflow-hidden rounded-sm transition-all duration-500 cursor-pointer flex flex-col justify-between
+          ${isDark
+            ? 'bg-[#121212] border border-white/5 hover:border-brand-gold/50'
+            : 'bg-white border border-gray-200 hover:border-brand-gold/50 hover:shadow-[0_10px_40px_-15px_rgba(180,151,90,0.15)]'
           }
         `}
         initial="rest"
@@ -41,67 +70,64 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, desc, index, the
       >
         {/* Hover Gradient Background */}
         <MotionDiv
-          className={`absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100
-            ${isDark 
-              ? 'bg-gradient-to-b from-brand-gold/5 via-[#121212]/40 to-[#121212]/90' 
-              : 'bg-gradient-to-br from-brand-gold/5 via-white to-white'
+          className={`absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none
+            ${isDark
+              ? 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-gold/10 via-[#121212] to-[#121212]'
+              : 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-gold/5 via-white to-white'
             }
           `}
         />
 
         <div className="relative p-8 h-full flex flex-col z-10">
-          
+
           {/* Header */}
-          <div className="flex justify-between items-start mb-6">
+          <div className="flex justify-between items-start mb-8">
             <MotionDiv
               variants={{
-                rest: { scale: 1, color: isDark ? '#ffffff' : '#0a0a0a' },
-                hover: { scale: 0.9, color: '#B4975A' }
+                rest: { scale: 1, x: 0, color: isDark ? '#ffffff' : '#0a0a0a', backgroundColor: 'transparent' },
+                hover: { scale: 1, x: 5, color: '#B4975A', backgroundColor: 'transparent' }
               }}
-              className="p-3 bg-brand-light/5 rounded-lg backdrop-blur-sm"
+              transition={{ duration: 0.4 }}
+              className="p-0"
             >
-              {icon}
+              {React.cloneElement(icon as React.ReactElement, { strokeWidth: 1.5, size: 36 })}
             </MotionDiv>
-            
+
             <MotionDiv
               variants={{
-                rest: { opacity: 0.3, x: 5, y: -5 },
-                hover: { opacity: 1, x: 0, y: 0 }
+                rest: { opacity: 0.2, x: 0, y: 0, scale: 1 },
+                hover: { opacity: 1, x: 2, y: -2, scale: 1.1, color: '#B4975A' }
               }}
-              transition={{ duration: 0.3 }}
-              className={`p-2 rounded-full border ${isDark ? 'border-white/20' : 'border-black/10'}`}
+              className={`text-brand-black ${isDark ? 'text-white' : 'text-brand-black'}`}
             >
-              <ArrowUpRight className={isDark ? "text-white" : "text-brand-black"} size={16} />
+              <ArrowUpRight size={20} strokeWidth={1.5} />
             </MotionDiv>
           </div>
 
           {/* Content */}
-          <div className="mt-auto">
-            <MotionH3 
-              className={`font-serif text-2xl font-medium leading-tight mb-3 ${isDark ? 'text-white' : 'text-brand-black'}`}
+          <div className="mt-auto relative">
+            {/* Dynamic Line above title */}
+            <MotionDiv
+              variants={{
+                rest: { width: 0, opacity: 0 },
+                hover: { width: 40, opacity: 1, backgroundColor: '#B4975A' }
+              }}
+              className="h-[2px] mb-4"
+            />
+
+            <MotionH3
+              className={`font-serif text-3xl mb-4 tracking-tight ${isDark ? 'text-white' : 'text-brand-black group-hover:text-brand-black'}`}
               variants={{
                 rest: { y: 0 },
-                hover: { y: -5 }
+                hover: { y: -2 }
               }}
             >
               {title}
             </MotionH3>
-            
-            <MotionDiv
-                className="overflow-hidden"
-                variants={{
-                    rest: { opacity: 0.7, height: "auto" },
-                    hover: { opacity: 1, height: "auto" }
-                }}
-            >
-                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
-                    {desc}
-                </p>
-                
-                <MotionDiv 
-                  className={`h-0.5 bg-brand-gold mt-4 w-0 group-hover:w-full transition-all duration-500 ease-out`}
-                />
-            </MotionDiv>
+
+            <p className={`text-sm leading-relaxed font-light ${isDark ? 'text-gray-400 group-hover:text-gray-300' : 'text-gray-500 group-hover:text-gray-600'}`}>
+              {desc}
+            </p>
           </div>
         </div>
       </MotionDiv>
@@ -137,13 +163,16 @@ export const TaxServices = () => {
     <section className="py-20 sm:py-32 bg-gray-50 relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <SectionTitle subtitle="Especialidade" title="Direito Tributário" />
-        
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar">
-          {services.map((service, idx) => (
-            <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
-               <ServiceCard index={idx} {...service} theme="light" />
-            </div>
-          ))}
+
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
+            {services.map((service, idx) => (
+              <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
+                <ServiceCard index={idx} {...service} theme="light" />
+              </div>
+            ))}
+          </div>
+          <ScrollHint />
         </div>
       </div>
     </section>
@@ -179,16 +208,19 @@ export const RealEstateServices = () => {
       {/* Fixed Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
-      
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <SectionTitle subtitle="Especialidade" title="Direito Imobiliário" dark={true} />
-        
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar">
-          {services.map((service, idx) => (
-            <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
-              <ServiceCard index={idx} {...service} theme="dark" />
-            </div>
-          ))}
+
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
+            {services.map((service, idx) => (
+              <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
+                <ServiceCard index={idx} {...service} theme="dark" />
+              </div>
+            ))}
+          </div>
+          <ScrollHint />
         </div>
       </div>
     </section>
@@ -223,13 +255,16 @@ export const BusinessTaxServices = () => {
     <section className="py-20 sm:py-32 bg-white relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <SectionTitle subtitle="Especialidade" title="Direito Empresarial" />
-        
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar">
-          {services.map((service, idx) => (
-            <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
-               <ServiceCard index={idx} {...service} theme="light" />
-            </div>
-          ))}
+
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
+            {services.map((service, idx) => (
+              <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
+                <ServiceCard index={idx} {...service} theme="light" />
+              </div>
+            ))}
+          </div>
+          <ScrollHint />
         </div>
       </div>
     </section>
@@ -268,13 +303,16 @@ export const SocialSecurityServices = () => {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <SectionTitle subtitle="Especialidade" title="Direito Previdenciário" dark={true} />
-        
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar">
-          {services.map((service, idx) => (
-            <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
-              <ServiceCard index={idx} {...service} theme="dark" />
-            </div>
-          ))}
+
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
+            {services.map((service, idx) => (
+              <div key={idx} className="min-w-[85vw] sm:min-w-0 snap-center">
+                <ServiceCard index={idx} {...service} theme="dark" />
+              </div>
+            ))}
+          </div>
+          <ScrollHint />
         </div>
       </div>
     </section>

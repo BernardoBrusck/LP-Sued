@@ -31,9 +31,9 @@ export const FAQ = () => {
     <section className="py-24 bg-brand-light" aria-labelledby="faq-title">
       <div className="max-w-3xl mx-auto px-6">
         <div id="faq-title">
-            <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
+          <SectionTitle subtitle="Dúvidas" title="Perguntas Frequentes" />
         </div>
-        
+
         <div className="space-y-2">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
@@ -41,36 +41,36 @@ export const FAQ = () => {
             const headerId = `faq-header-${idx}`;
 
             return (
-                <Reveal key={idx} width="100%" delay={idx * 0.05}>
-                <div 
-                    className={`bg-white transition-all duration-300 border-l-4 ${isOpen ? 'border-brand-gold shadow-lg' : 'border-transparent'}`}
+              <Reveal key={idx} width="100%" delay={idx * 0.05}>
+                <div
+                  className={`bg-white transition-all duration-300 border-l-4 ${isOpen ? 'border-brand-gold shadow-lg' : 'border-transparent'}`}
                 >
-                    <button
-                        id={headerId}
-                        aria-expanded={isOpen}
-                        aria-controls={contentId}
-                        onClick={() => setOpenIndex(isOpen ? null : idx)}
-                        className="w-full flex justify-between items-center p-6 text-left focus:outline-none focus-visible:bg-gray-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
-                    >
-                        <span className={`font-bold text-lg ${isOpen ? 'text-brand-black' : 'text-gray-600'}`}>
-                            {faq.q}
-                        </span>
-                        <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-gold' : 'text-gray-400'}`} aria-hidden="true">
-                            {isOpen ? <Minus size={20} /> : <Plus size={20} />}
-                        </div>
-                    </button>
-                    <div 
-                        id={contentId}
-                        role="region"
-                        aria-labelledby={headerId}
-                        className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}
-                    >
-                        <div className="p-6 pt-0 text-gray-600 leading-relaxed">
-                            {faq.a}
-                        </div>
+                  <button
+                    id={headerId}
+                    aria-expanded={isOpen}
+                    aria-controls={contentId}
+                    onClick={() => setOpenIndex(isOpen ? null : idx)}
+                    className="w-full flex justify-between items-center p-6 text-left focus:outline-none focus-visible:bg-gray-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+                  >
+                    <span className={`font-bold text-lg ${isOpen ? 'text-brand-black' : 'text-gray-600'}`}>
+                      {faq.q}
+                    </span>
+                    <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-gold' : 'text-gray-400'}`} aria-hidden="true">
+                      {isOpen ? <Minus size={20} /> : <Plus size={20} />}
                     </div>
+                  </button>
+                  <div
+                    id={contentId}
+                    role="region"
+                    aria-labelledby={headerId}
+                    className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}
+                  >
+                    <div className="p-6 pt-0 text-gray-600 leading-relaxed">
+                      {faq.a}
+                    </div>
+                  </div>
                 </div>
-                </Reveal>
+              </Reveal>
             );
           })}
         </div>
@@ -102,11 +102,11 @@ export const ContactAndFooter = () => {
     <footer className="bg-brand-black text-white relative overflow-hidden">
       {/* Imagem de Fundo Fixa para o Rodapé e Formulário */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center opacity-20 pointer-events-none"></div>
-      
+
       {/* Contact Form Section */}
       <div className="max-w-7xl mx-auto px-6 py-24 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          
+
           <address className="not-italic">
             <SectionTitle subtitle="Contato" title="Vamos Conversar" dark />
             <Reveal>
@@ -117,37 +117,37 @@ export const ContactAndFooter = () => {
 
             <div className="space-y-8">
               <Reveal delay={0.1}>
-                 <a href="tel:+5511999999999" className="flex items-center gap-4 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded-md p-2 -ml-2">
-                    <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
-                      <Phone size={20} aria-hidden="true" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-widest">Telefone</p>
-                      <p className="text-lg font-bold">+55 11 99999-9999</p>
-                    </div>
-                 </a>
+                <a href="tel:+5511999999999" className="flex items-center gap-4 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded-md p-2 -ml-2">
+                  <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
+                    <Phone size={20} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest">Telefone</p>
+                    <p className="text-lg font-bold">+55 11 99999-9999</p>
+                  </div>
+                </a>
               </Reveal>
               <Reveal delay={0.2}>
-                 <a href="mailto:contato@romariosued.adv.br" className="flex items-center gap-4 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded-md p-2 -ml-2">
-                    <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
-                      <Mail size={20} aria-hidden="true" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-widest">Email</p>
-                      <p className="text-lg font-bold">contato@romariosued.adv.br</p>
-                    </div>
-                 </a>
+                <a href="mailto:contato@romariosued.adv.br" className="flex items-center gap-4 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded-md p-2 -ml-2">
+                  <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
+                    <Mail size={20} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest">Email</p>
+                    <p className="text-lg font-bold">contato@romariosued.adv.br</p>
+                  </div>
+                </a>
               </Reveal>
               <Reveal delay={0.3}>
-                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 rounded">
-                      <MapPin size={20} aria-hidden="true" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-widest">Escritório</p>
-                      <p className="text-lg font-bold">Av. Paulista, 1000 - SP</p>
-                    </div>
-                 </div>
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 rounded">
+                    <MapPin size={20} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest">Escritório</p>
+                    <p className="text-lg font-bold">Av. Paulista, 1000 - SP</p>
+                  </div>
+                </div>
               </Reveal>
             </div>
           </address>
@@ -158,7 +158,7 @@ export const ContactAndFooter = () => {
               <div className="min-h-[400px] flex flex-col justify-center bg-white/5 p-8 sm:p-12 rounded-2xl border border-white/10 backdrop-blur-md shadow-2xl">
                 <AnimatePresence mode="wait">
                   {formStatus === 'success' ? (
-                    <MotionDiv 
+                    <MotionDiv
                       key="success"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -172,8 +172,8 @@ export const ContactAndFooter = () => {
                       <p className="text-gray-400 mb-8 font-light">
                         Obrigado pelo contato. Nossa equipe analisará sua solicitação e retornará em breve.
                       </p>
-                      <Button 
-                        onClick={() => setFormStatus('idle')} 
+                      <Button
+                        onClick={() => setFormStatus('idle')}
                         primary={false}
                         className="w-full"
                       >
@@ -181,12 +181,12 @@ export const ContactAndFooter = () => {
                       </Button>
                     </MotionDiv>
                   ) : (
-                    <MotionForm 
+                    <MotionForm
                       key="form"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      onSubmit={handleSubmit} 
+                      onSubmit={handleSubmit}
                       className="space-y-6"
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -207,11 +207,11 @@ export const ContactAndFooter = () => {
                         <label htmlFor="message" className="block text-xs uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-brand-gold transition-colors">Mensagem</label>
                         <textarea required id="message" rows={4} className="w-full bg-transparent border-b border-gray-700 py-3 text-white focus:outline-none focus:border-brand-gold transition-colors" placeholder="Como podemos ajudar?"></textarea>
                       </div>
-                      
+
                       {formStatus === 'error' && (
-                        <MotionDiv 
-                          initial={{ opacity: 0, y: -10 }} 
-                          animate={{ opacity: 1, y: 0 }} 
+                        <MotionDiv
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
                           className="p-3 bg-red-500/10 border border-red-500/20 rounded flex items-center gap-2 text-red-400 text-sm"
                         >
                           <AlertCircle size={16} />
@@ -239,11 +239,12 @@ export const ContactAndFooter = () => {
       {/* Footer Bottom */}
       <div className="border-t border-white/5 bg-brand-black/90 py-8 relative z-10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-           <p>&copy; {new Date().getFullYear()} Romário Sued. Todos os direitos reservados.</p>
-           <div className="flex gap-6 mt-4 md:mt-0">
-             <a href="#" className="hover:text-white transition-colors focus:outline-none focus-visible:text-white focus-visible:underline">Privacidade</a>
-             <a href="#" className="hover:text-white transition-colors focus:outline-none focus-visible:text-white focus-visible:underline">Termos</a>
-           </div>
+          <p>&copy; {new Date().getFullYear()} Romário Sued. Todos os direitos reservados.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a href="https://etechjr.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors focus:outline-none focus-visible:text-white focus-visible:underline text-xs md:text-sm opacity-60 hover:opacity-100">
+              Desenvolvido por ETECH Jr.
+            </a>
+          </div>
         </div>
       </div>
     </footer>
