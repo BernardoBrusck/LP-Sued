@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { SectionTitle, Reveal } from './UI';
 import { Check, Award, Shield, Zap, Scale, BookOpen, Search, FileText } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { GoldSpotlight } from './ui/GoldSpotlight';
 
 // --- About Section ---
 export const About = () => {
@@ -195,6 +196,9 @@ export const WhyUs = () => {
 
   return (
     <section className="py-24 lg:py-32 bg-[#050505] relative overflow-hidden" aria-labelledby="why-us-title">
+      {/* Spotlight Effect (Desktop Only) */}
+      <GoldSpotlight />
+
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl mx-auto pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-gold/5 rounded-full blur-[128px]"></div>

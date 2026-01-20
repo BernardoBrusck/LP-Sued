@@ -54,13 +54,27 @@ const BackToTop = () => {
 const App = () => {
   const { scrollY } = useScroll();
   const [showBottomNav, setShowBottomNav] = useState(false);
+  const [forceHideNav, setForceHideNav] = useState(false);
 
   // Fix: Cast motion div to any
   const MotionDiv = motion.div as any;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setShowBottomNav(latest > 50);
+    if (forceHideNav) {
+      setShowBottomNav(false);
+    } else {
+      setShowBottomNav(latest > 50);
+    }
   });
+
+  // Re-run visibility check when forceHideNav changes
+  useEffect(() => {
+    if (forceHideNav) {
+      setShowBottomNav(false);
+    } else {
+      setShowBottomNav(scrollY.get() > 50);
+    }
+  }, [forceHideNav, scrollY]);
 
   const navItems = [
     { name: 'Sobre', url: '#sobre', icon: User },
@@ -93,7 +107,7 @@ const App = () => {
         <div id="sobre"><About /></div>
         <Divider text="Nossas Especialidades" />
         <div id="servicos">
-          <ServicesStack />
+          <ServicesStack setForceHideNav={setForceHideNav} />
         </div>
         <div id="metodologia">
           <Methodology />

@@ -27,12 +27,12 @@ export const HeroPremium = () => {
             gsap.set([subtitleRef.current, buttonsRef.current], { y: 40, opacity: 0 });
             gsap.set(imageContainerRef.current, { x: 50, opacity: 0 });
             gsap.set([badgeRef.current, iconsRef.current], { opacity: 0, scale: 0.9 });
-            gsap.set(bgRef.current, { scale: 1.15, opacity: 0 });
-            gsap.set(cursorRef.current, { scale: 0 });
+            gsap.set(bgRef.current, { scale: 1.25, opacity: 0 });
+            gsap.set(cursorRef.current, { scale: 0, xPercent: -50, yPercent: -50 }); // Center centering via GSAP
             gsap.set(".hero-word", { y: 20, opacity: 0 });
 
             // 2. Entrance Animation Sequence
-            tl.to(bgRef.current, { scale: 1, opacity: 0.4, duration: 2, ease: "power2.inOut" })
+            tl.to(bgRef.current, { scale: 1.1, opacity: 0.4, duration: 2, ease: "power2.inOut" })
                 .to(imageContainerRef.current, { x: 0, opacity: 1, duration: 1.5, ease: "power2.out" }, "-=1.5")
                 .to(".hero-word", { y: 0, opacity: 1, stagger: 0.05, duration: 1 }, "-=1.2")
                 .to(subtitleRef.current, { y: 0, opacity: 1 }, "-=0.8")
@@ -40,25 +40,60 @@ export const HeroPremium = () => {
                 .to([iconsRef.current, badgeRef.current], { opacity: 1, scale: 1, stagger: 0.1 }, "-=0.4")
                 .to(cursorRef.current, { scale: 1 }, "-=0.2");
 
-            // 3. Mouse Interaction (Parallax & Cursor)
+            // 3. Mouse Interaction (Optimized)
+            // Use quickTo for high-performance cursor following
+            const xTo = gsap.quickTo(cursorRef.current, "x", { duration: 0.15, ease: "power2.out" });
+            const yTo = gsap.quickTo(cursorRef.current, "y", { duration: 0.15, ease: "power2.out" });
+
             const handleMouseMove = (e: MouseEvent) => {
                 const { clientX, clientY } = e;
+                const { innerWidth, innerHeight } = window;
 
-                // Cursor Follower
-                gsap.to(cursorRef.current, {
-                    x: clientX,
-                    y: clientY,
-                    duration: 0.2,
-                    ease: "power2.out"
+                // Optimized Cursor
+                xTo(clientX);
+                yTo(clientY);
+
+                // Parallax Calculations (Throttled by RAF by nature of GSAP internal ticker usually, but direct set is OK here)
+                const xNorm = (clientX / innerWidth) * 2 - 1;
+                const yNorm = (clientY / innerHeight) * 2 - 1;
+
+                // Deep Parallax for Background
+                gsap.to(bgRef.current, {
+                    x: -xNorm * 12,
+                    y: -yNorm * 12,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    overwrite: "auto"
                 });
 
-                // Subtle Parallax for Background
-                const moveX = (clientX / window.innerWidth - 0.5) * 15;
-                const moveY = (clientY / window.innerHeight - 0.5) * 15;
-                gsap.to(bgRef.current, { x: moveX, y: moveY, duration: 1.5 });
+                // Image Container
+                gsap.to(imageContainerRef.current, {
+                    rotationY: xNorm * 0.5,
+                    rotationX: -yNorm * 0.5,
+                    x: xNorm * 2,
+                    y: yNorm * 2,
+                    duration: 1.2,
+                    ease: "power2.out",
+                    overwrite: "auto"
+                });
 
-                // Very subtle parallax for image to separate planes
-                gsap.to(imageContainerRef.current, { x: moveX * 0.5, duration: 2 });
+                // Text Content
+                gsap.to([titleRef.current, subtitleRef.current, buttonsRef.current], {
+                    x: -xNorm * 8,
+                    y: -yNorm * 8,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    overwrite: "auto"
+                });
+
+                // Badge
+                gsap.to(badgeRef.current, {
+                    x: xNorm * 10,
+                    y: yNorm * 10,
+                    duration: 1.8,
+                    ease: "power2.out",
+                    overwrite: "auto"
+                });
             };
 
             window.addEventListener('mousemove', handleMouseMove);
@@ -121,12 +156,12 @@ export const HeroPremium = () => {
     return (
         <section
             ref={root}
-            className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center cursor-none"
+            className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center lg:cursor-none"
         >
             {/* --- 1. Custom Cursor --- */}
             <div
                 ref={cursorRef}
-                className="fixed top-0 left-0 w-6 h-6 border border-brand-gold/50 rounded-full pointer-events-none z-[100] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center mix-blend-difference"
+                className="fixed top-0 left-0 w-6 h-6 border border-brand-gold/50 rounded-full pointer-events-none z-[100] hidden lg:flex items-center justify-center will-change-transform"
             >
                 <div className="w-1 h-1 bg-brand-gold rounded-full" />
             </div>
@@ -137,7 +172,7 @@ export const HeroPremium = () => {
                 className="absolute inset-0 z-0 bg-cover bg-center opacity-40 will-change-transform"
                 style={{ backgroundImage: `url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=2000')` }}
             />
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent" />
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/40" />
 
             {/* --- 3. Main Grid Layout --- */}
@@ -171,7 +206,7 @@ export const HeroPremium = () => {
                 </div>
 
                 {/* Right Column: Image & Branding (Allocated 6/12 columns) - HIDDEN on Mobile/Tablet */}
-                <div className="hidden lg:flex lg:col-span-6 h-full relative flex-col justify-end items-center lg:items-end order-2 lg:order-2 pointer-events-none">
+                <div className="hidden lg:flex lg:col-span-6 h-full relative flex-col justify-end items-center lg:items-end order-2 lg:order-2 pointer-events-none perspective-[1000px]">
 
                     {/* Icons (Absolute Top Right of this column area) */}
                     <div ref={iconsRef} className="absolute top-24 right-0 lg:right-12 z-30 flex gap-8 text-brand-gold/30 pointer-events-auto">
@@ -183,7 +218,7 @@ export const HeroPremium = () => {
                     {/* Image Container */}
                     <div ref={imageContainerRef} className="relative w-full h-[50vh] lg:h-[90vh] flex items-end justify-center lg:justify-center">
                         {/* Glow Behind */}
-                        <div className="absolute bottom-0 right-10 w-[60%] h-[60%] bg-brand-gold/5 blur-[100px] rounded-full mix-blend-screen" />
+                        <div className="absolute bottom-0 right-10 w-[60%] h-[60%] bg-brand-gold/5 blur-[100px] rounded-full" />
 
                         {/* Image */}
                         <img

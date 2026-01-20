@@ -8,6 +8,68 @@
   <meta name="description"
     content="Advocacia moderna, técnica e resolutiva. Especialista em Direito Tributário e Imobiliário." />
 
+  <!-- SEO & Social Meta Tags -->
+  <meta name="keywords"
+    content="Advogado, Direito Tributário, Direito Imobiliário, Direito Empresarial, Direito Previdenciário, Romário Sued, Advocacia, Consultoria Jurídica" />
+  <meta name="author" content="Romário Sued" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://romariosued.adv.br/" />
+  <meta property="og:title" content="Romário Sued | Advocacia Estratégica" />
+  <meta property="og:description"
+    content="Soluções jurídicas sofisticadas e de alto impacto. Especialista em Direito Tributário, Imobiliário e Empresarial." />
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=1200" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://romariosued.adv.br/" />
+  <meta property="twitter:title" content="Romário Sued | Advocacia Estratégica" />
+  <meta property="twitter:description"
+    content="Soluções jurídicas sofisticadas e de alto impacto. Especialista em Direito Tributário, Imobiliário e Empresarial." />
+  <meta property="twitter:image"
+    content="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=1200" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://romariosued.adv.br/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LegalService",
+      "name": "Romário Sued Advocacia",
+      "image": "https://images.unsplash.com/photo-1505664194779-8beaceb93744",
+      "description": "Advocacia de alto padrão especializada em Direito Tributário, Imobiliário, Empresarial e Previdenciário.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Brasil",
+        "addressCountry": "BR"
+      },
+      "url": "https://romariosued.adv.br/",
+      "priceRange": "$$$",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    }
+  </script>
+
   <!-- Google Fonts: Inter (Sans) & Playfair Display (Serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,15 +116,7 @@
     }
 
     /* Texture Overlay */
-    .bg-texture::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E');
-      opacity: 0.4;
-      pointer-events: none;
-      z-index: 0;
-    }
+    /* Texture Overlay Removed for Performance */
 
     /* Custom scrollbar */
     ::-webkit-scrollbar {

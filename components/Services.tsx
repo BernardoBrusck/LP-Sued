@@ -141,7 +141,7 @@ export const TaxServices = () => {
   ];
 
   return (
-    <section className="py-20 sm:py-32 bg-gray-50 relative border-b border-gray-100">
+    <section className="py-12 sm:py-20 bg-gray-50 relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Tributário</>} />
 
@@ -184,7 +184,7 @@ export const RealEstateServices = () => {
   ];
 
   return (
-    <section className="min-h-screen py-20 sm:py-32 relative text-white">
+    <section className="min-h-screen py-12 sm:py-20 relative text-white">
       {/* Fixed Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
@@ -231,7 +231,7 @@ export const BusinessTaxServices = () => {
   ];
 
   return (
-    <section className="py-20 sm:py-32 bg-white relative border-b border-gray-100">
+    <section className="py-12 sm:py-20 bg-white relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
         <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Empresarial</>} />
 
@@ -274,7 +274,7 @@ export const SocialSecurityServices = () => {
   ];
 
   return (
-    <section className="min-h-screen py-20 sm:py-32 relative text-white">
+    <section className="min-h-screen py-12 sm:py-20 relative text-white">
       {/* Fixed Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#171717]/90 backdrop-blur-[2px]"></div>
@@ -296,11 +296,22 @@ export const SocialSecurityServices = () => {
   );
 };
 
-export const ServicesStack = () => {
+export const ServicesStack = ({ setForceHideNav }: { setForceHideNav?: (hide: boolean) => void }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
+      // Navbar Control Trigger
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        onEnter: () => setForceHideNav && setForceHideNav(true),
+        onLeave: () => setForceHideNav && setForceHideNav(false),
+        onEnterBack: () => setForceHideNav && setForceHideNav(true),
+        onLeaveBack: () => setForceHideNav && setForceHideNav(false),
+      });
+
       const cards = gsap.utils.toArray('.service-card') as HTMLElement[];
 
       cards.forEach((card, i) => {
