@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 import { SectionTitle, Reveal } from './UI';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -41,18 +40,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, desc, index, the
           group relative w-full h-[320px] sm:h-[360px]
           overflow-hidden rounded-sm transition-all duration-500 cursor-pointer flex flex-col justify-between
           ${isDark
-            ? 'bg-[#121212] border border-white/5 hover:border-brand-gold/50'
-            : 'bg-white border border-gray-200 hover:border-brand-gold/50 hover:shadow-[0_10px_40px_-15px_rgba(180,151,90,0.15)]'
+            ? 'bg-[#121212] border border-white/5 lg:hover:border-brand-gold/50'
+            : 'bg-white border border-gray-200 lg:hover:border-brand-gold/50 lg:hover:shadow-[0_10px_40px_-15px_rgba(180,151,90,0.15)]'
           }
         `}
         initial="rest"
-        whileHover="hover"
-        whileTap="hover"
+        whileHover={typeof window !== 'undefined' && window.innerWidth >= 1024 ? "hover" : "rest"}
+        whileTap="rest"
         animate="rest"
       >
         {/* Hover Gradient Background */}
         <MotionDiv
-          className={`absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none
+          className={`absolute inset-0 opacity-0 transition-opacity duration-700 lg:group-hover:opacity-100 pointer-events-none
             ${isDark
               ? 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-gold/10 via-[#121212] to-[#121212]'
               : 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-gold/5 via-white to-white'
@@ -144,7 +143,7 @@ export const TaxServices = () => {
   return (
     <section className="py-20 sm:py-32 bg-gray-50 relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
-        <SectionTitle subtitle="Especialidade" title="Direito Tributário" />
+        <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Tributário</>} />
 
         <div className="relative">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
@@ -185,9 +184,9 @@ export const RealEstateServices = () => {
   ];
 
   return (
-    <section className="min-h-screen flex flex-col justify-center py-20 sm:py-32 relative text-white overflow-hidden">
+    <section className="min-h-screen py-20 sm:py-32 relative text-white">
       {/* Fixed Background */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center"></div>
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -234,7 +233,7 @@ export const BusinessTaxServices = () => {
   return (
     <section className="py-20 sm:py-32 bg-white relative border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
-        <SectionTitle subtitle="Especialidade" title="Direito Empresarial" />
+        <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Empresarial</>} />
 
         <div className="relative">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
@@ -275,9 +274,9 @@ export const SocialSecurityServices = () => {
   ];
 
   return (
-    <section className="min-h-screen flex flex-col justify-center py-20 sm:py-32 relative text-white overflow-hidden">
+    <section className="min-h-screen py-20 sm:py-32 relative text-white">
       {/* Fixed Background */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center"></div>
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#171717]/90 backdrop-blur-[2px]"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -298,18 +297,40 @@ export const SocialSecurityServices = () => {
 };
 
 export const ServicesStack = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray('.service-card') as HTMLElement[];
+
+      cards.forEach((card, i) => {
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top top",
+          endTrigger: containerRef.current,
+          end: "bottom bottom",
+          pin: true,
+          pinSpacing: false,
+          scrub: true,
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative w-full">
-      <div className="service-card sticky top-0 z-10 min-h-screen flex flex-col justify-center bg-gray-50 origin-top">
+    <div ref={containerRef} className="relative w-full">
+      <div className="service-card z-10 min-h-screen flex flex-col justify-center bg-gray-50 origin-top">
         <TaxServices />
       </div>
-      <div className="service-card sticky top-0 z-20 min-h-screen flex flex-col justify-center bg-[#0a0a0a] origin-top">
+      <div className="service-card z-20 min-h-screen flex flex-col justify-center bg-[#0a0a0a] origin-top">
         <RealEstateServices />
       </div>
-      <div className="service-card sticky top-0 z-30 min-h-screen flex flex-col justify-center bg-white origin-top">
+      <div className="service-card z-30 min-h-screen flex flex-col justify-center bg-white origin-top">
         <BusinessTaxServices />
       </div>
-      <div className="service-card sticky top-0 z-40 min-h-screen flex flex-col justify-center bg-[#171717] origin-top">
+      <div className="service-card z-40 min-h-screen flex flex-col justify-center bg-[#171717] origin-top">
         <SocialSecurityServices />
       </div>
     </div>
