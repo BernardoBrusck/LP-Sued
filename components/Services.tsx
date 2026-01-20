@@ -191,7 +191,7 @@ export const RealEstateServices = () => {
       <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <SectionTitle subtitle="Especialidade" title="Direito Imobiliário" dark={true} />
+        <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Imobiliário</>} dark={true} />
 
         <div className="relative">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">
@@ -281,7 +281,7 @@ export const SocialSecurityServices = () => {
       <div className="absolute inset-0 bg-[#171717]/90 backdrop-blur-[2px]"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <SectionTitle subtitle="Especialidade" title="Direito Previdenciário" dark={true} />
+        <SectionTitle subtitle="Especialidade" title={<>Direito <br className="block md:hidden" />Previdenciário</>} dark={true} />
 
         <div className="relative">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-8 -mx-6 px-6 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 hide-scrollbar scroll-smooth">

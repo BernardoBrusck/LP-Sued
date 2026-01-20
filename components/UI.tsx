@@ -11,7 +11,7 @@ interface RevealProps {
 
 interface SectionTitleProps {
   subtitle: string;
-  title: string;
+  title: string | React.ReactNode;
   dark?: boolean;
 }
 
@@ -55,7 +55,7 @@ function useOnScreen(ref: React.RefObject<Element>, rootMargin: string = "0px") 
  */
 export const Reveal: React.FC<RevealProps> = ({ children, width = "fit-content", delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isVisible = useOnScreen(ref, "-30px"); 
+  const isVisible = useOnScreen(ref, "-30px");
   const shouldReducedMotion = useReducedMotion();
 
   const transformValue = shouldReducedMotion ? "translateY(0)" : "translateY(20px)";
@@ -96,8 +96,8 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({ subtitle, title, dar
   );
 };
 
-export const Button: React.FC<ButtonProps> = ({ 
-  children, 
+export const Button: React.FC<ButtonProps> = ({
+  children,
   primary = true,
   onClick,
   className = "",
@@ -118,8 +118,8 @@ export const Button: React.FC<ButtonProps> = ({
         rounded shadow-sm
         focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-        ${primary 
-          ? `bg-brand-gold text-white border border-brand-gold ${!disabled ? 'hover:bg-brand-goldHover hover:border-brand-goldHover hover:shadow-lg hover:shadow-brand-gold/20' : ''}` 
+        ${primary
+          ? `bg-brand-gold text-white border border-brand-gold ${!disabled ? 'hover:bg-brand-goldHover hover:border-brand-goldHover hover:shadow-lg hover:shadow-brand-gold/20' : ''}`
           : `bg-transparent border border-white/30 text-white backdrop-blur-sm ${!disabled ? 'hover:bg-white hover:text-brand-black hover:border-white' : ''}`
         }
         ${className}
@@ -134,8 +134,8 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string; dar
   return (
     <div className={`
       p-8 transition-all duration-500 h-full
-      ${dark 
-        ? 'bg-brand-gray border border-white/5 hover:border-brand-gold/50' 
+      ${dark
+        ? 'bg-brand-gray border border-white/5 hover:border-brand-gold/50'
         : 'bg-white hover:shadow-xl hover:-translate-y-1 border border-transparent hover:border-gray-100'
       }
       ${className}
