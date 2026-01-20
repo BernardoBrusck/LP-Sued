@@ -1,42 +1,24 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import { SectionTitle, Reveal } from './UI';
+
+gsap.registerPlugin(ScrollTrigger);
+
 import {
   TrendingUp, Scale, RefreshCw, FileText, Building,
   Shield, Key, Search, ArrowUpRight, Briefcase,
   CircleDollarSign, Calculator, Handshake, Users,
-  HeartPulse, Activity, ChevronRight
+  HeartPulse, Activity
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ScrollHint = () => (
-  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none lg:hidden flex items-center pr-1 h-full">
-    {/* Gradient Fade Overlay - Context Aware? No, generic dark fade looks ok on white cards too? 
-          Actually, on Light Mode sections (Tax, Business), a Black Fade might look dirty. 
-          On Dark Mode (RealEstate, Social), a Black Fade is good. 
-          Let's make it subtle. 
-      */}
-    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black/10 to-transparent sm:from-black/20"></div>
 
-    <div className="flex -space-x-4 relative z-10 drop-shadow-sm">
-      {[0, 1, 2].map((i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: [0, 1, 0], x: [0, 15, 30] }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            delay: i * 0.2,
-            ease: "easeOut",
-            fill: "forwards"
-          }}
-        >
-          <ChevronRight className="text-brand-gold w-10 h-10" strokeWidth={3} />
-        </motion.div>
-      ))}
-    </div>
-  </div>
-);
+
+// ... (existing code)
+
+
 
 // --- Responsive Service Card Component ---
 interface ServiceCardProps {
@@ -172,7 +154,6 @@ export const TaxServices = () => {
               </div>
             ))}
           </div>
-          <ScrollHint />
         </div>
       </div>
     </section>
@@ -204,7 +185,7 @@ export const RealEstateServices = () => {
   ];
 
   return (
-    <section className="py-20 sm:py-32 relative text-white overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center py-20 sm:py-32 relative text-white overflow-hidden">
       {/* Fixed Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-[2px]"></div>
@@ -220,7 +201,6 @@ export const RealEstateServices = () => {
               </div>
             ))}
           </div>
-          <ScrollHint />
         </div>
       </div>
     </section>
@@ -264,7 +244,6 @@ export const BusinessTaxServices = () => {
               </div>
             ))}
           </div>
-          <ScrollHint />
         </div>
       </div>
     </section>
@@ -296,7 +275,7 @@ export const SocialSecurityServices = () => {
   ];
 
   return (
-    <section className="py-20 sm:py-32 relative text-white overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center py-20 sm:py-32 relative text-white overflow-hidden">
       {/* Fixed Background */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop')] bg-fixed bg-cover bg-center"></div>
       <div className="absolute inset-0 bg-[#171717]/90 backdrop-blur-[2px]"></div>
@@ -312,9 +291,27 @@ export const SocialSecurityServices = () => {
               </div>
             ))}
           </div>
-          <ScrollHint />
         </div>
       </div>
     </section>
+  );
+};
+
+export const ServicesStack = () => {
+  return (
+    <div className="relative w-full">
+      <div className="service-card sticky top-0 z-10 min-h-screen flex flex-col justify-center bg-gray-50 origin-top">
+        <TaxServices />
+      </div>
+      <div className="service-card sticky top-0 z-20 min-h-screen flex flex-col justify-center bg-[#0a0a0a] origin-top">
+        <RealEstateServices />
+      </div>
+      <div className="service-card sticky top-0 z-30 min-h-screen flex flex-col justify-center bg-white origin-top">
+        <BusinessTaxServices />
+      </div>
+      <div className="service-card sticky top-0 z-40 min-h-screen flex flex-col justify-center bg-[#171717] origin-top">
+        <SocialSecurityServices />
+      </div>
+    </div>
   );
 };

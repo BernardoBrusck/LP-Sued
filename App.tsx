@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
-import { TaxServices, RealEstateServices, BusinessTaxServices, SocialSecurityServices } from './components/Services';
+import { ServicesStack } from './components/Services';
 import { About, Methodology, WhyUs } from './components/InfoSections';
 import { FAQ, ContactAndFooter } from './components/Interactive';
 import { NavBar } from './components/ui/tubelight-navbar';
@@ -93,10 +93,7 @@ const App = () => {
         <div id="sobre"><About /></div>
         <Divider text="Nossas Especialidades" />
         <div id="servicos">
-          <TaxServices />
-          <RealEstateServices />
-          <BusinessTaxServices />
-          <SocialSecurityServices />
+          <ServicesStack />
         </div>
         <div id="metodologia">
           <Methodology />
