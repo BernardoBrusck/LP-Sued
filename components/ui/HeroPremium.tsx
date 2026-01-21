@@ -17,87 +17,99 @@ export const HeroPremium = () => {
     const iconsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const isMobile = window.innerWidth < 768;
+
         let ctx = gsap.context(() => {
             const tl = gsap.timeline({
                 defaults: { ease: "power3.out", duration: 1.2 }
             });
 
-            // 1. Initial Styles (Hidden)
-            // Note: We don't hide titleRef because we animate its children (.hero-word) individually
-            gsap.set([subtitleRef.current, buttonsRef.current], { y: 40, opacity: 0 });
-            gsap.set(imageContainerRef.current, { x: 50, opacity: 0 });
-            gsap.set([badgeRef.current, iconsRef.current], { opacity: 0, scale: 0.9 });
-            gsap.set(bgRef.current, { scale: 1.25, opacity: 0 });
-            gsap.set(cursorRef.current, { scale: 0, xPercent: -50, yPercent: -50 }); // Center centering via GSAP
-            gsap.set(".hero-word", { y: 20, opacity: 0 });
+            // 1. Initial Styles 
+            if (isMobile) {
+                // Mobile: Show content immediately to improve LCP
+                gsap.set([subtitleRef.current, buttonsRef.current], { y: 0, opacity: 1 });
+                gsap.set(imageContainerRef.current, { x: 0, opacity: 1 });
+                gsap.set([badgeRef.current, iconsRef.current], { opacity: 1, scale: 1 });
+                gsap.set(bgRef.current, { scale: 1.1, opacity: 0.4 });
+                gsap.set(".hero-word", { y: 0, opacity: 1 });
+            } else {
+                // Desktop: Prepare for entrance animation
+                gsap.set([subtitleRef.current, buttonsRef.current], { y: 40, opacity: 0 });
+                gsap.set(imageContainerRef.current, { x: 50, opacity: 0 });
+                gsap.set([badgeRef.current, iconsRef.current], { opacity: 0, scale: 0.9 });
+                gsap.set(bgRef.current, { scale: 1.25, opacity: 0 });
+                gsap.set(cursorRef.current, { scale: 0, xPercent: -50, yPercent: -50 });
+                gsap.set(".hero-word", { y: 20, opacity: 0 });
 
-            // 2. Entrance Animation Sequence
-            tl.to(bgRef.current, { scale: 1.1, opacity: 0.4, duration: 2, ease: "power2.inOut" })
-                .to(imageContainerRef.current, { x: 0, opacity: 1, duration: 1.5, ease: "power2.out" }, "-=1.5")
-                .to(".hero-word", { y: 0, opacity: 1, stagger: 0.05, duration: 1 }, "-=1.2")
-                .to(subtitleRef.current, { y: 0, opacity: 1 }, "-=0.8")
-                .to(buttonsRef.current, { y: 0, opacity: 1 }, "-=0.6")
-                .to([iconsRef.current, badgeRef.current], { opacity: 1, scale: 1, stagger: 0.1 }, "-=0.4")
-                .to(cursorRef.current, { scale: 1 }, "-=0.2");
+                // Entrance Animation Sequence (Desktop Only)
+                tl.to(bgRef.current, { scale: 1.1, opacity: 0.4, duration: 2, ease: "power2.inOut" })
+                    .to(imageContainerRef.current, { x: 0, opacity: 1, duration: 1.5, ease: "power2.out" }, "-=1.5")
+                    .to(".hero-word", { y: 0, opacity: 1, stagger: 0.05, duration: 1 }, "-=1.2")
+                    .to(subtitleRef.current, { y: 0, opacity: 1 }, "-=0.8")
+                    .to(buttonsRef.current, { y: 0, opacity: 1 }, "-=0.6")
+                    .to([iconsRef.current, badgeRef.current], { opacity: 1, scale: 1, stagger: 0.1 }, "-=0.4")
+                    .to(cursorRef.current, { scale: 1 }, "-=0.2");
+            }
 
-            // 3. Mouse Interaction (Optimized)
-            // Use quickTo for high-performance cursor following
-            const xTo = gsap.quickTo(cursorRef.current, "x", { duration: 0.15, ease: "power2.out" });
-            const yTo = gsap.quickTo(cursorRef.current, "y", { duration: 0.15, ease: "power2.out" });
+            // 3. Mouse Interaction (Optimized - Desktop Only)
+            if (!isMobile && window.matchMedia('(hover: hover)').matches) {
+                const xTo = gsap.quickTo(cursorRef.current, "x", { duration: 0.15, ease: "power2.out" });
+                const yTo = gsap.quickTo(cursorRef.current, "y", { duration: 0.15, ease: "power2.out" });
 
-            const handleMouseMove = (e: MouseEvent) => {
-                const { clientX, clientY } = e;
-                const { innerWidth, innerHeight } = window;
+                const handleMouseMove = (e: MouseEvent) => {
+                    const { clientX, clientY } = e;
+                    const { innerWidth, innerHeight } = window;
 
-                // Optimized Cursor
-                xTo(clientX);
-                yTo(clientY);
+                    // Optimized Cursor
+                    xTo(clientX);
+                    yTo(clientY);
 
-                // Parallax Calculations (Throttled by RAF by nature of GSAP internal ticker usually, but direct set is OK here)
-                const xNorm = (clientX / innerWidth) * 2 - 1;
-                const yNorm = (clientY / innerHeight) * 2 - 1;
+                    // Parallax Calculations
+                    const xNorm = (clientX / innerWidth) * 2 - 1;
+                    const yNorm = (clientY / innerHeight) * 2 - 1;
 
-                // Deep Parallax for Background
-                gsap.to(bgRef.current, {
-                    x: -xNorm * 12,
-                    y: -yNorm * 12,
-                    duration: 1.5,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
+                    // Deep Parallax for Background
+                    gsap.to(bgRef.current, {
+                        x: -xNorm * 12,
+                        y: -yNorm * 12,
+                        duration: 1.5,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
 
-                // Image Container
-                gsap.to(imageContainerRef.current, {
-                    rotationY: xNorm * 0.5,
-                    rotationX: -yNorm * 0.5,
-                    x: xNorm * 2,
-                    y: yNorm * 2,
-                    duration: 1.2,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
+                    // Image Container
+                    gsap.to(imageContainerRef.current, {
+                        rotationY: xNorm * 0.5,
+                        rotationX: -yNorm * 0.5,
+                        x: xNorm * 2,
+                        y: yNorm * 2,
+                        duration: 1.2,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
 
-                // Text Content
-                gsap.to([titleRef.current, subtitleRef.current, buttonsRef.current], {
-                    x: -xNorm * 8,
-                    y: -yNorm * 8,
-                    duration: 1.5,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
+                    // Text Content
+                    gsap.to([titleRef.current, subtitleRef.current, buttonsRef.current], {
+                        x: -xNorm * 8,
+                        y: -yNorm * 8,
+                        duration: 1.5,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
 
-                // Badge
-                gsap.to(badgeRef.current, {
-                    x: xNorm * 10,
-                    y: yNorm * 10,
-                    duration: 1.8,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
-            };
+                    // Badge
+                    gsap.to(badgeRef.current, {
+                        x: xNorm * 10,
+                        y: yNorm * 10,
+                        duration: 1.8,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
+                };
 
-            window.addEventListener('mousemove', handleMouseMove);
-            return () => window.removeEventListener('mousemove', handleMouseMove);
+                window.addEventListener('mousemove', handleMouseMove);
+                return () => window.removeEventListener('mousemove', handleMouseMove);
+            }
         }, root);
 
         return () => ctx.revert();
@@ -169,8 +181,7 @@ export const HeroPremium = () => {
             {/* --- 2. Background --- */}
             <div
                 ref={bgRef}
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 will-change-transform"
-                style={{ backgroundImage: `url('/background-hero.webp')` }}
+                className="absolute inset-0 z-0 bg-cover bg-center opacity-40 will-change-transform md:bg-[url('/background-hero.webp')] bg-[url('/background-hero-mobile.webp')]"
             />
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent" />
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/40" />
