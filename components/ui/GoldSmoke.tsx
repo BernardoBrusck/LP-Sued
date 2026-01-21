@@ -111,7 +111,11 @@ export const GoldSmoke = () => {
         }
 
         updateSize();
-        animate();
+        updateSize();
+        // Delay animation start to improve initial page load performance
+        setTimeout(() => {
+            animate();
+        }, 2000);
 
         return () => {
             window.removeEventListener('resize', updateSize);

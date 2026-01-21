@@ -222,7 +222,7 @@ export const HeroPremium = () => {
 
                         {/* Image */}
                         <img
-                            src="/hero-portrait.png"
+                            src="/hero-portrait.webp"
                             alt="Romário Sued"
                             className="relative z-10 w-auto h-full object-contain object-bottom drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] pointer-events-auto"
                         />
