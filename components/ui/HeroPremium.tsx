@@ -170,7 +170,7 @@ export const HeroPremium = () => {
             <div
                 ref={bgRef}
                 className="absolute inset-0 z-0 bg-cover bg-center opacity-40 will-change-transform"
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=2000')` }}
+                style={{ backgroundImage: `url('/background-hero.webp')` }}
             />
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent" />
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/40" />
