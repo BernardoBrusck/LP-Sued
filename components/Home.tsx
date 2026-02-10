@@ -9,9 +9,20 @@ import { TestimonialsSection } from './ui/testimonial-v2';
 import { User, Briefcase, FileText, ArrowUp } from 'lucide-react';
 
 const Divider = ({ text }: { text: string }) => (
-    <div className="bg-[#0a0a0a] py-16 border-y border-white/5" role="separator">
-        <div className="max-w-7xl mx-auto px-6">
-            <h3 className="text-white/40 text-sm font-sans uppercase tracking-[0.3em] text-center">{text}</h3>
+    <div className="relative bg-[#0a0a0a] py-12 border-y border-white/5 overflow-hidden" role="separator">
+        {/* Ambient Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[400px] bg-brand-gold/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 flex items-center justify-center gap-6">
+            {/* Left Line */}
+            <div className="h-px w-16 md:w-32 bg-gradient-to-r from-transparent via-brand-gold/40 to-brand-gold/80"></div>
+
+            <h3 className="text-white text-xl md:text-2xl font-serif italic tracking-widest text-center">
+                {text}
+            </h3>
+
+            {/* Right Line */}
+            <div className="h-px w-16 md:w-32 bg-gradient-to-r from-brand-gold/80 via-brand-gold/40 to-transparent"></div>
         </div>
     </div>
 );

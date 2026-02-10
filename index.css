@@ -9,7 +9,11 @@
   }
 
   body {
-    @apply bg-brand-light text-brand-black overflow-x-hidden antialiased selection:bg-brand-gold selection:text-white;
+    @apply bg-brand-light text-brand-black overflow-x-hidden antialiased selection:bg-brand-gold selection:text-white tracking-wide;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
   }
 }
 

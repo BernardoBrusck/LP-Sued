@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ArrowRight, Shield, Scale, Gavel } from 'lucide-react';
+import TextBlockAnimation from './text-block-animation';
 
 export const HeroPremium = () => {
     const root = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ export const HeroPremium = () => {
     useEffect(() => {
         let ctx = gsap.context(() => {
             const tl = gsap.timeline({
-                defaults: { ease: "power3.out", duration: 1.2 }
+                defaults: { ease: "power3.out", duration: 1.5 }
             });
 
             // 1. Initial Styles (Hidden)
@@ -114,6 +115,8 @@ export const HeroPremium = () => {
 
     // --- Components ---
 
+    // --- Components ---
+
     const AdvancedButton = ({ children, onClick, primary = true, className = "" }: { children: React.ReactNode, onClick: () => void, primary?: boolean, className?: string }) => {
         const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -157,11 +160,13 @@ export const HeroPremium = () => {
         <section
             ref={root}
             className="relative h-screen w-full overflow-hidden bg-[#050505] flex flex-col justify-center lg:cursor-none"
+            onMouseEnter={() => gsap.to(cursorRef.current, { scale: 1, opacity: 1, duration: 0.3 })}
+            onMouseLeave={() => gsap.to(cursorRef.current, { scale: 0, opacity: 0, duration: 0.3 })}
         >
             {/* --- 1. Custom Cursor --- */}
             <div
                 ref={cursorRef}
-                className="fixed top-0 left-0 w-6 h-6 border border-brand-gold/50 rounded-full pointer-events-none z-[100] hidden lg:flex items-center justify-center will-change-transform"
+                className="fixed top-0 left-0 w-6 h-6 border border-brand-gold/50 rounded-full pointer-events-none z-[100] hidden lg:flex items-center justify-center will-change-transform opacity-0 scale-0"
             >
                 <div className="w-1 h-1 bg-brand-gold rounded-full" />
             </div>
@@ -180,28 +185,56 @@ export const HeroPremium = () => {
 
                 {/* Left Column: Text Content (Allocated 5/12 columns - Shifted Right) */}
                 <div className="lg:col-span-5 lg:col-start-2 flex flex-col justify-center items-center text-center lg:items-start lg:text-left order-1 lg:order-1 relative z-20 w-full">
-                    <h1 ref={titleRef} className="font-serif text-4xl sm:text-5xl lg:text-7xl xl:text-8xl text-white mb-8 leading-[1.05] tracking-tight">
-                        <div className="block italic text-white/90">
-                            {splitTextToWords("Defesa de")}
-                        </div>
-                        <div className="block text-brand-gold mt-2">
-                            {splitTextToWords("Alto Impacto.")}
-                        </div>
-                    </h1>
+                    {/* Main Title Group - Centered relative to each other, Left aligned in grid */}
+                    {/* Main Title Group - Centered relative to each other, Left aligned in grid */}
+                    <div className="flex flex-col items-center lg:items-center relative z-20 mb-10">
+                        <h1 ref={titleRef} className="flex flex-col items-center text-center">
+                            {/* SUED - Main Impact (Refined) */}
+                            <TextBlockAnimation delay={0.1} className="block">
+                                <div className="font-serif text-[6rem] sm:text-[8rem] lg:text-[10rem] xl:text-[11rem] leading-[0.8] tracking-tight">
+                                    <span className="text-brand-gold drop-shadow-xl">
+                                        SUED
+                                    </span>
+                                </div>
+                            </TextBlockAnimation>
 
-                    <p ref={subtitleRef} className="font-sans text-[10px] md:text-[12px] text-white/50 mb-12 tracking-[0.2em] leading-loose uppercase max-w-md lg:border-l border-brand-gold/30 lg:pl-6">
-                        Soluções jurídicas <span className="text-white">sofisticadas</span> para desafios complexos.
-                        <br className="hidden md:block" />
-                        Rigor técnico e excelência absoluta.
-                    </p>
+                            {/* Advogados Associados - Secondary */}
+                            <div className="w-full flex justify-center mt-4">
+                                <div className="relative">
+                                    <TextBlockAnimation delay={0.3} blockColor="#52525B">
+                                        {/* Using Zinc-600 for subtitle block to differentiate or keep gold? User said "gold" for all. Let's stick to Gold default but maybe thinner? */}
+                                        {/* User said "all text... gold block". I will use default gold. */}
+                                        <div className="font-sans text-xs sm:text-sm lg:text-lg tracking-[0.4em] uppercase text-white/90 font-light border-y border-white/10 py-3 px-10 w-fit bg-black/20 backdrop-blur-sm">
+                                            Advogados Associados
+                                        </div>
+                                    </TextBlockAnimation>
+                                </div>
+                            </div>
+                        </h1>
+                    </div>
+
+                    <div className="mb-12 max-w-md lg:pl-6 lg:border-l border-brand-gold/30">
+                        <TextBlockAnimation delay={0.5} stagger={0.05}>
+                            <p ref={subtitleRef} className="font-sans text-[10px] md:text-[12px] text-white/50 tracking-[0.2em] leading-loose uppercase">
+                                Soluções jurídicas <span className="text-white">sofisticadas</span> para desafios complexos.
+                                <br className="hidden md:block" />
+                                Rigor técnico e excelência absoluta.
+                            </p>
+                        </TextBlockAnimation>
+                    </div>
 
                     <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-5">
-                        <AdvancedButton onClick={() => document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })}>
-                            Agendar <ArrowRight size={14} className="ml-3" />
-                        </AdvancedButton>
-                        <AdvancedButton primary={false} onClick={() => document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' })}>
-                            Saiba Mais
-                        </AdvancedButton>
+                        <TextBlockAnimation delay={0.7}>
+                            <AdvancedButton onClick={() => document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })}>
+                                Agendar <ArrowRight size={14} className="ml-3" />
+                            </AdvancedButton>
+                        </TextBlockAnimation>
+
+                        <TextBlockAnimation delay={0.8}>
+                            <AdvancedButton primary={false} onClick={() => document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' })}>
+                                Saiba Mais
+                            </AdvancedButton>
+                        </TextBlockAnimation>
                     </div>
                 </div>
 

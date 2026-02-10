@@ -4,6 +4,7 @@ import { SectionTitle, Reveal } from './UI';
 import { Check, Award, Shield, Zap, Scale, BookOpen, Search, FileText } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { GoldSpotlight } from './ui/GoldSpotlight';
+import TextBlockAnimation from './ui/text-block-animation';
 
 // --- About Section ---
 export const About = () => {
@@ -28,9 +29,13 @@ export const About = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60"></div>
 
                 {/* Name tag on image */}
-                <div className="absolute bottom-6 left-6 text-white z-10">
-                  <p className="text-xs uppercase tracking-widest mb-1 opacity-80">Sócio Fundador</p>
-                  <p className="font-serif text-2xl">Romário Sued</p>
+                <div className="absolute bottom-6 left-6 text-white z-10 flex flex-col items-start gap-1">
+                  <TextBlockAnimation delay={0.5} className="block">
+                    <p className="text-xs uppercase tracking-widest opacity-80">Sócio Fundador</p>
+                  </TextBlockAnimation>
+                  <TextBlockAnimation delay={0.6} className="block">
+                    <p className="font-serif text-2xl">Romário Sued</p>
+                  </TextBlockAnimation>
                 </div>
               </div>
             </Reveal>
@@ -41,53 +46,70 @@ export const About = () => {
 
           {/* Content Column */}
           <div className="w-full lg:w-7/12 pt-4">
-            <Reveal delay={0.1}>
-              <div className="flex items-center gap-3 mb-6" aria-hidden="true">
-                <div className="h-px w-8 bg-brand-gold"></div>
-                <span className="text-brand-gold font-bold tracking-[0.2em] text-xs uppercase">
-                  Sobre o Escritório
-                </span>
-              </div>
-            </Reveal>
+            {/* SectionTitle handled internally */}
+            <div className="mb-6">
+              <TextBlockAnimation delay={0.1}>
+                <div className="flex items-center gap-3" aria-hidden="true">
+                  <div className="h-px w-8 bg-brand-gold"></div>
+                  <span className="text-brand-gold font-bold tracking-[0.2em] text-xs uppercase">
+                    Sobre o Escritório
+                  </span>
+                </div>
+              </TextBlockAnimation>
+            </div>
 
-            <Reveal delay={0.2}>
-              <h2 id="about-title" className="font-serif text-4xl lg:text-5xl lg:leading-tight text-brand-black mb-8">
-                Advocacia artesanal com <br /> <span className="text-brand-gold italic">precisão cirúrgica</span>.
-              </h2>
-            </Reveal>
+            <div className="mb-8">
+              <TextBlockAnimation delay={0.2} className="block">
+                <h2 id="about-title" className="font-serif text-4xl lg:text-5xl lg:leading-tight text-brand-black">
+                  Advocacia artesanal com <br /> <span className="text-brand-gold italic">precisão cirúrgica</span>.
+                </h2>
+              </TextBlockAnimation>
+            </div>
 
             <div className="space-y-8 max-w-xl">
-              <Reveal delay={0.3}>
-                <p className="text-lg text-gray-800 font-medium leading-relaxed border-l-2 border-brand-gold pl-6 py-1">
-                  "O mercado não aceita mais respostas padronizadas. Nossa atuação combina profundidade acadêmica com uma visão agressiva de negócios."
-                </p>
-              </Reveal>
+              <div className="border-l-2 border-brand-gold pl-6 py-1">
+                <TextBlockAnimation delay={0.3}>
+                  <p className="text-lg text-gray-800 font-medium leading-relaxed">
+                    "O mercado não aceita mais respostas padronizadas. Nossa atuação combina profundidade acadêmica com uma visão agressiva de negócios."
+                  </p>
+                </TextBlockAnimation>
+              </div>
 
-              <Reveal delay={0.4}>
+              <TextBlockAnimation delay={0.4}>
                 <p className="text-gray-600 leading-relaxed font-light">
                   Com mais de uma década de atuação, fundei o escritório com uma premissa clara: eliminar o "juridiquês" e focar no resultado financeiro e segurança jurídica do cliente.
                   Especialista em teses tributárias de alto valor e regularização fundiária complexa, lidero uma equipe orientada por dados e eficiência.
                 </p>
-              </Reveal>
+              </TextBlockAnimation>
             </div>
 
             {/* Stats Grid */}
-            <Reveal delay={0.5}>
-              <dl className="mt-16 grid grid-cols-3 gap-8 border-t border-gray-100 pt-8">
-                <div>
-                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Atuação</dt>
-                  <dd className="font-serif text-4xl text-brand-black">10<span className="text-brand-gold text-2xl">+</span></dd>
-                </div>
-                <div>
-                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Casos</dt>
-                  <dd className="font-serif text-4xl text-brand-black">500<span className="text-brand-gold text-2xl">+</span></dd>
-                </div>
-                <div>
-                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Recuperados</dt>
-                  <dd className="font-serif text-4xl text-brand-black">50<span className="text-brand-gold text-2xl">mi</span></dd>
-                </div>
-              </dl>
-            </Reveal>
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-100 pt-8">
+              <div>
+                <TextBlockAnimation delay={0.5}>
+                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Anos de Experiência</dt>
+                </TextBlockAnimation>
+                <TextBlockAnimation delay={0.6}>
+                  <dd className="font-serif text-4xl text-brand-black">15<span className="text-brand-gold text-2xl">+</span></dd>
+                </TextBlockAnimation>
+              </div>
+              <div>
+                <TextBlockAnimation delay={0.6}>
+                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Casos Recuperados</dt>
+                </TextBlockAnimation>
+                <TextBlockAnimation delay={0.7}>
+                  <dd className="font-serif text-4xl text-brand-black">1.2k<span className="text-brand-gold text-2xl">+</span></dd>
+                </TextBlockAnimation>
+              </div>
+              <div>
+                <TextBlockAnimation delay={0.7}>
+                  <dt className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Valores Recuperados</dt>
+                </TextBlockAnimation>
+                <TextBlockAnimation delay={0.8}>
+                  <dd className="font-serif text-4xl text-brand-black">85<span className="text-brand-gold text-2xl">mi</span></dd>
+                </TextBlockAnimation>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -125,11 +147,12 @@ export const Methodology = () => {
             <div id="methodology-title">
               <SectionTitle subtitle="O Processo" title="Nossa Metodologia" />
             </div>
-            <Reveal>
+
+            <TextBlockAnimation delay={0.2}>
               <p className="text-gray-600 text-lg max-w-md leading-relaxed mb-10">
                 Não acreditamos em sorte. Acreditamos em método, preparação e execução técnica impecável. Cada caso é tratado como um projeto único com etapas bem definidas.
               </p>
-            </Reveal>
+            </TextBlockAnimation>
 
             <Reveal delay={0.2} width="100%">
               <div className="p-8 md:p-10 bg-white border border-gray-100 rounded-xl shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-500">
@@ -137,11 +160,15 @@ export const Methodology = () => {
                   <div className="p-3 bg-brand-gold/10 rounded-lg">
                     <FileText className="text-brand-gold" size={24} />
                   </div>
-                  <h4 className="font-bold text-xl text-brand-black font-serif">Transparência Radical</h4>
+                  <TextBlockAnimation delay={0.3}>
+                    <h4 className="font-bold text-xl text-brand-black font-serif">Transparência Radical</h4>
+                  </TextBlockAnimation>
                 </div>
-                <p className="text-gray-500 leading-relaxed">
-                  Você acompanha cada movimento do processo através de relatórios mensais detalhados e acesso direto à equipe.
-                </p>
+                <TextBlockAnimation delay={0.4}>
+                  <p className="text-gray-500 leading-relaxed">
+                    Você acompanha cada movimento do processo através de relatórios mensais detalhados e acesso direto à equipe.
+                  </p>
+                </TextBlockAnimation>
               </div>
             </Reveal>
           </div>
@@ -162,19 +189,24 @@ export const Methodology = () => {
             <div className="space-y-20 relative z-20">
               {steps.map((step, idx) => (
                 <div key={idx} className="relative pl-10 group">
-                  <Reveal width="100%" delay={idx * 0.1}>
-                    <div className="flex flex-col gap-2">
-                      {/* Text Content */}
-                      <div className="pt-0">
+                  {/* Reuse Reveal for sliding in the container, but Text Block for content? Or just TextBlock for content? */}
+                  {/* Let's be consistent: TextBlock everywhere */}
+                  <div className="flex flex-col gap-2">
+                    {/* Text Content */}
+                    <div className="pt-0">
+                      <TextBlockAnimation delay={0.1} animateOnScroll={true}>
                         <h3 className="text-3xl font-bold font-serif text-brand-black mb-3 group-hover:text-brand-gold transition-colors">
                           {step.title}
                         </h3>
+                      </TextBlockAnimation>
+
+                      <TextBlockAnimation delay={0.2} animateOnScroll={true}>
                         <p className="text-gray-600 text-lg leading-relaxed max-w-lg">
                           {step.desc}
                         </p>
-                      </div>
+                      </TextBlockAnimation>
                     </div>
-                  </Reveal>
+                  </div>
                 </div>
               ))}
             </div>
@@ -229,8 +261,13 @@ export const WhyUs = () => {
                   {React.cloneElement(item.icon as React.ReactElement<any>, { size: 28, strokeWidth: 1.5 })}
                 </motion.div>
 
-                <h3 className="text-xl font-serif text-white mb-4 group-hover:translate-x-1 transition-transform duration-300">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">{item.desc}</p>
+                <TextBlockAnimation delay={0.2} blockColor="#B4975A" animateOnScroll={false}> {/* Inside card reveal might be redundant if card reveals, but user wants text block. animateOnScroll=false to let parent control or strict local trigger? Let's use false/low delay. */}
+                  <h3 className="text-xl font-serif text-white mb-4 group-hover:translate-x-1 transition-transform duration-300">{item.title}</h3>
+                </TextBlockAnimation>
+
+                <TextBlockAnimation delay={0.3} blockColor="#52525B" animateOnScroll={false}>
+                  <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">{item.desc}</p>
+                </TextBlockAnimation>
               </motion.div>
             </Reveal>
           ))}

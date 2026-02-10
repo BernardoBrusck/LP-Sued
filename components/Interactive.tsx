@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { SectionTitle, Reveal, Button } from './UI';
 import { Plus, Minus, ArrowRight, Mail, MapPin, Phone, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TextBlockAnimation from './ui/text-block-animation';
 
 // --- FAQ Section ---
 export const FAQ = () => {
@@ -109,11 +110,13 @@ export const ContactAndFooter = () => {
 
           <address className="not-italic">
             <SectionTitle subtitle="Contato" title="Vamos Conversar" dark />
-            <Reveal>
-              <p className="text-gray-400 text-lg mb-12 max-w-md font-light">
-                Seu patrimônio merece defesa especializada. Preencha o formulário e entraremos em contato em até 24h.
-              </p>
-            </Reveal>
+            <div className="mb-12 max-w-md">
+              <TextBlockAnimation delay={0.2} blockColor="#52525B">
+                <p className="text-gray-400 text-lg font-light">
+                  Seu patrimônio merece defesa especializada. Preencha o formulário e entraremos em contato em até 24h.
+                </p>
+              </TextBlockAnimation>
+            </div>
 
             <div className="space-y-8">
               <Reveal delay={0.1}>
@@ -121,9 +124,13 @@ export const ContactAndFooter = () => {
                   <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
                     <Phone size={20} aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest">Telefone</p>
-                    <p className="text-lg font-bold">+55 11 99999-9999</p>
+                  <div className="flex flex-col items-start">
+                    <TextBlockAnimation delay={0.2} animateOnScroll={false} className="block mb-1">
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">Telefone</p>
+                    </TextBlockAnimation>
+                    <TextBlockAnimation delay={0.3} animateOnScroll={false} className="block">
+                        <p className="text-lg font-bold">+55 11 99999-9999</p>
+                    </TextBlockAnimation>
                   </div>
                 </a>
               </Reveal>
@@ -132,9 +139,13 @@ export const ContactAndFooter = () => {
                   <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 group-hover:bg-brand-gold transition-colors rounded">
                     <Mail size={20} aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest">Email</p>
-                    <p className="text-lg font-bold">contato@romariosued.adv.br</p>
+                  <div className="flex flex-col items-start">
+                    <TextBlockAnimation delay={0.3} animateOnScroll={false} className="block mb-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-widest">Email</p>
+                    </TextBlockAnimation>
+                    <TextBlockAnimation delay={0.4} animateOnScroll={false} className="block">
+                      <p className="text-lg font-bold">contato@suede.adv.br</p>
+                    </TextBlockAnimation>
                   </div>
                 </a>
               </Reveal>
@@ -143,9 +154,13 @@ export const ContactAndFooter = () => {
                   <div className="p-3 bg-brand-gray/50 backdrop-blur-sm border border-white/5 rounded">
                     <MapPin size={20} aria-hidden="true" />
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest">Escritório</p>
-                    <p className="text-lg font-bold">Av. Paulista, 1000 - SP</p>
+                  <div className="flex flex-col items-start">
+                    <TextBlockAnimation delay={0.4} animateOnScroll={false} className="block mb-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-widest">Escritório</p>
+                    </TextBlockAnimation>
+                    <TextBlockAnimation delay={0.5} animateOnScroll={false} className="block">
+                      <p className="text-lg font-bold">Endereço Físico do Escritório</p>
+                    </TextBlockAnimation>
                   </div>
                 </div>
               </Reveal>
@@ -239,11 +254,16 @@ export const ContactAndFooter = () => {
       {/* Footer Bottom */}
       <div className="border-t border-white/5 bg-brand-black/90 py-8 relative z-10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Romário Sued. Todos os direitos reservados.</p>
+          <div className="mb-4 md:mb-0">
+            {/* Branding Logo */}
+            <div className="mb-4">
+              <span className="font-serif text-2xl text-white tracking-widest">SUED</span>
+              <span className="ml-2 text-[10px] uppercase tracking-[0.2em] text-brand-gold">Advogados</span>
+            </div>
+            <p>&copy; {new Date().getFullYear()} Suede e Advogados Associados. Todos os direitos reservados.</p>
+          </div>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="https://etechjr.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors focus:outline-none focus-visible:text-white focus-visible:underline text-xs md:text-sm opacity-60 hover:opacity-100">
-              Desenvolvido por ETECH Jr.
-            </a>
+            <a href="#" className="hover:text-white transition-colors">Politica de Privacidade</a>
           </div>
         </div>
       </div>
